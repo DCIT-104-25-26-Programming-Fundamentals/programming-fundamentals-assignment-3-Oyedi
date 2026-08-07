@@ -72,6 +72,181 @@
 //
 // =============================================================================
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
+const readlineSync = require('readline-sync');
+
+/**
+ * Adds two numbers.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+function add(a, b) {
+  return a + b;
+}
+
+/**
+ * Subtracts the second number from the first.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+function subtract(a, b) {
+  return a - b;
+}
+
+/**
+ * Multiplies two numbers.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ */
+function multiply(a, b) {
+  return a * b;
+}
+
+/**
+ * Divides the first number by the second.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number|null} Returns null if dividing by zero.
+ */
+function divide(a, b) {
+  if (b === 0) {
+    return null;
+  }
+  return a / b;
+}
+
+/**
+ * Computes the remainder of dividing the first number by the second.
+ * @param {number} a
+ * @param {number} b
+ * @returns {number|null} Returns null if calculating modulus with zero.
+ */
+function modulus(a, b) {
+  if (b === 0) {
+    return null;
+  }
+  return a % b;
+}
+
+/**
+ * Raises the base number to the exponent power.
+ * @param {number} base
+ * @param {number} exponent
+ * @returns {number}
+ */
+function exponentiate(base, exponent) {
+  return base ** exponent;
+}
+
+/**
+ * Prompts the user to enter two numbers and validates input.
+ * @returns {{ num1: number, num2: number } | null}
+ */
+function getTwoNumbers() {
+  const input1 = readlineSync.question("Enter first number : ");
+  const num1 = parseFloat(input1);
+
+  if (isNaN(num1)) {
+    console.log("Error: Please enter a valid first number.");
+    return null;
+  }
+
+  const input2 = readlineSync.question("Enter second number: ");
+  const num2 = parseFloat(input2);
+
+  if (isNaN(num2)) {
+    console.log("Error: Please enter a valid second number.");
+    return null;
+  }
+
+  return { num1, num2 };
+}
+
+/**
+ * Main application loop driving the interactive calculator interface.
+ */
+function main() {
+  let running = true;
+
+  while (running) {
+    console.log("\n============================");
+    console.log("     SIMPLE CALCULATOR      ");
+    console.log("============================");
+    console.log("1. Addition");
+    console.log("2. Subtraction");
+    console.log("3. Multiplication");
+    console.log("4. Division");
+    console.log("5. Modulus");
+    console.log("6. Exponentiation");
+    console.log("7. Quit");
+
+    const choice = readlineSync.question("Select an operation (1-7): ").trim();
+
+    if (choice === '7') {
+      console.log("Goodbye!");
+      running = false;
+      continue;
+    }
+
+    if (!['1', '2', '3', '4', '5', '6'].includes(choice)) {
+      console.log("Invalid selection. Please choose an option from 1 to 7.");
+      continue;
+    }
+
+    const operands = getTwoNumbers();
+    if (!operands) {
+      continue;
+    }
+
+    const { num1, num2 } = operands;
+    let result;
+
+    switch (choice) {
+      case '1':
+        result = add(num1, num2);
+        console.log(`Result: ${num1} + ${num2} = ${result.toFixed(2)}`);
+        break;
+
+      case '2':
+        result = subtract(num1, num2);
+        console.log(`Result: ${num1} - ${num2} = ${result.toFixed(2)}`);
+        break;
+
+      case '3':
+        result = multiply(num1, num2);
+        console.log(`Result: ${num1} * ${num2} = ${result.toFixed(2)}`);
+        break;
+
+      case '4':
+        result = divide(num1, num2);
+        if (result === null) {
+          console.log("Error: Cannot divide by zero.");
+        } else {
+          console.log(`Result: ${num1} / ${num2} = ${result.toFixed(2)}`);
+        }
+        break;
+
+      case '5':
+        result = modulus(num1, num2);
+        if (result === null) {
+          console.log("Error: Cannot divide by zero.");
+        } else {
+          console.log(`Result: ${num1} % ${num2} = ${result.toFixed(2)}`);
+        }
+        break;
+
+      case '6':
+        result = exponentiate(num1, num2);
+        console.log(`Result: ${num1} ** ${num2} = ${result.toFixed(2)}`);
+        break;
+    }
+  }
+}
+
+// Run the main program
+main();
 // =============================================================================
 
 
