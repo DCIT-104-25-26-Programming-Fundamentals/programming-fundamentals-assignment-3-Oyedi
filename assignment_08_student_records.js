@@ -82,6 +82,176 @@
 
 // =============================================================================
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
+const readlineSync = require('readline-sync');
+
+/**
+ * Calculates the average score for an array of numbers.
+ * @param {number[]} scores - Array of numerical scores.
+ * @returns {number} The average score.
+ */
+function calculateAverageScore(scores) {
+  if (scores.length === 0) return 0;
+  let sum = 0;
+  for (let i = 0; i < scores.length; i++) {
+    sum += scores[i];
+  }
+  return sum / scores.length;
+}
+
+/**
+ * Prompts the user for details and adds a new student object to the records.
+ * @param {Object[]} students - Array of student objects.
+ */
+function addStudent(students) {
+  const name = readlineSync.question("Student name: ").trim();
+  if (name === "") {
+    console.log("Error: Student name cannot be empty.");
+    return;
+  }
+
+  const idInput = readlineSync.question("Student ID: ");
+  const id = parseInt(idInput, 10);
+  if (isNaN(id) || id <= 0) {
+    console.log("Error: Student ID must be a valid positive integer.");
+    return;
+  }
+
+  // Ensure unique ID
+  const exists = students.some(s => s.id === id);
+  if (exists) {
+    console.log(`Error: A student with ID ${id} already exists.`);
+    return;
+  }
+
+  const scoreCountInput = readlineSync.question("How many scores? ");
+  const scoreCount = parseInt(scoreCountInput, 10);
+  if (isNaN(scoreCount) || scoreCount <= 0) {
+    console.log("Error: Number of scores must be a positive integer.");
+    return;
+  }
+
+  const scores = [];
+  for (let i = 1; i <= scoreCount; i++) {
+    const scoreInput = readlineSync.question(`Enter score ${i}: `);
+    const score = parseFloat(scoreInput);
+    if (isNaN(score) || score < 0 || score > 100) {
+      console.log("Error: Score must be a valid number between 0 and 100.");
+      return;
+    }
+    scores.push(score);
+  }
+
+  const newStudent = {
+    name: name,
+    id: id,
+    scores: scores
+  };
+
+  students.push(newStudent);
+  console.log(`Student "${name}" added successfully.`);
+}
+
+/**
+ * Displays all student records along with their individual and average scores.
+ * @param {Object[]} students - Array of student objects.
+ */
+function displayAllStudents(students) {
+  if (students.length === 0) {
+    console.log("No student records available.");
+    return;
+  }
+
+  console.log("\n--------------------------------------------------------------------------------");
+  console.log(`${"ID".padEnd(12)} | ${"Name".padEnd(20)} | ${"Scores".padEnd(20)} | ${"Average"}`);
+  console.log("--------------------------------------------------------------------------------");
+
+  for (let i = 0; i < students.length; i++) {
+    const student = students[i];
+    const avg = calculateAverageScore(student.scores).toFixed(2);
+    const scoresStr = student.scores.join(", ");
+
+    console.log(
+      `${String(student.id).padEnd(12)} | ${student.name.padEnd(20)} | ${scoresStr.padEnd(20)} | ${avg}`
+    );
+  }
+  console.log("--------------------------------------------------------------------------------");
+}
+
+/**
+ * Calculates and prints the average score for a student specified by ID.
+ * @param {Object[]} students - Array of student objects.
+ */
+function calculateSpecificAverage(students) {
+  if (students.length === 0) {
+    console.log("No student records available.");
+    return;
+  }
+
+  const idInput = readlineSync.question("Enter student ID: ");
+  const id = parseInt(idInput, 10);
+
+  if (isNaN(id)) {
+    console.log("Error: Invalid ID format.");
+    return;
+  }
+
+  let foundStudent = null;
+  for (let i = 0; i < students.length; i++) {
+    if (students[i].id === id) {
+      foundStudent = students[i];
+      break;
+    }
+  }
+
+  if (foundStudent) {
+    const avg = calculateAverageScore(foundStudent.scores).toFixed(2);
+    console.log(`${foundStudent.name}'s average score: ${avg}`);
+  } else {
+    console.log(`Error: Student with ID ${id} not found.`);
+  }
+}
+
+/**
+ * Main application loop.
+ */
+function main() {
+  const students = [];
+  let running = true;
+
+  while (running) {
+    console.log("\n================================");
+    console.log("   STUDENT RECORD SYSTEM MENU   ");
+    console.log("================================");
+    console.log("1. Add student");
+    console.log("2. Display all students");
+    console.log("3. Calculate average score");
+    console.log("4. Quit");
+
+    const choice = readlineSync.question("Enter your choice (1-4): ").trim();
+
+    switch (choice) {
+      case '1':
+        addStudent(students);
+        break;
+      case '2':
+        displayAllStudents(students);
+        break;
+      case '3':
+        calculateSpecificAverage(students);
+        break;
+      case '4':
+        console.log("Goodbye!");
+        running = false;
+        break;
+      default:
+        console.log("Invalid option. Please enter a choice between 1 and 4.");
+        break;
+    }
+  }
+}
+
+// Run the application
+main();
 // =============================================================================
 
 
