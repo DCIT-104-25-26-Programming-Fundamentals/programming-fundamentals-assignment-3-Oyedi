@@ -52,6 +52,83 @@
 //
 // =============================================================================
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
+const readlineSync = require('readline-sync');
+
+/**
+ * Generates and displays the first N terms of the Fibonacci sequence.
+ * @param {number} n - The number of terms to generate.
+ */
+function printFibonacciSequence(n) {
+  if (n <= 0) {
+    console.log("Error: Number of terms must be a positive integer.");
+    return;
+  }
+
+  const terms = [];
+  let a = 0;
+  let b = 1;
+
+  for (let i = 0; i < n; i++) {
+    terms.push(a);
+    const nextTerm = a + b;
+    a = b;
+    b = nextTerm;
+  }
+
+  console.log(`Fibonacci sequence: ${terms.join(' ')}`);
+}
+
+/**
+ * Checks whether a given number belongs to the Fibonacci sequence.
+ * @param {number} num - The number to check.
+ * @returns {boolean} True if the number is in the sequence, false otherwise.
+ */
+function isFibonacci(num) {
+  if (num < 0) return false;
+
+  let a = 0;
+  let b = 1;
+
+  while (a < num) {
+    const nextTerm = a + b;
+    a = b;
+    b = nextTerm;
+  }
+
+  return a === num;
+}
+
+/**
+ * Main function to handle user prompts and program flow.
+ */
+function main() {
+  console.log("--- PART A: Print the First N Terms ---");
+  const countInput = readlineSync.question("How many terms? ");
+  const n = parseInt(countInput, 10);
+
+  if (isNaN(n) || n <= 0) {
+    console.log("Error: N must be a positive integer.");
+  } else {
+    printFibonacciSequence(n);
+  }
+
+  console.log("\n--- PART B: Check if a Number Belongs to the Sequence ---");
+  const checkInput = readlineSync.question("Enter a number to check: ");
+  const targetNumber = parseInt(checkInput, 10);
+
+  if (isNaN(targetNumber) || targetNumber < 0) {
+    console.log("Error: Please enter a non-negative integer.");
+  } else {
+    if (isFibonacci(targetNumber)) {
+      console.log(`${targetNumber} is a Fibonacci number.`);
+    } else {
+      console.log(`${targetNumber} is NOT a Fibonacci number.`);
+    }
+  }
+}
+
+// Run the program
+main();
 // =============================================================================
 
 
